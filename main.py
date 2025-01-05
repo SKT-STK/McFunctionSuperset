@@ -99,5 +99,5 @@ for root, _dirs, files in os.walk('.'):
           
           lines[i] = new_command + '\n'
           
-      with open(file_path.replace('.mcfx', '.mcfunction'), 'w') as file:
+      with open(file_path.replace('.mcfx', '.mcfunction').replace('.mcfunctionx', '.mcfunction'), 'w') as file:
         file.writelines(lines)
