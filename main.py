@@ -2,7 +2,6 @@ import regex
 import re
 import os
 from uuid import uuid4
-from copy import deepcopy
 
 def extract_outer_braces(s, b):
   if b == '{}':
