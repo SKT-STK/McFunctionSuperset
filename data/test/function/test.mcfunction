@@ -1,13 +1,13 @@
-execute as @p at @s positioned ^ ^2 ^5 run summon armor_stand ~ ~ ~ {Tags:["a6d14492-4211-47b6-8246-0b4d9a8fdc73","yes"],ArmorItems:[{},{},{},{id:dirt}]}
-execute as @e[tag=a6d14492-4211-47b6-8246-0b4d9a8fdc73] at @s anchored eyes run particle totem_of_undying ~ ~ ~ 1 1 1 0.01 100 normal @a
-tag @e[tag=a6d14492-4211-47b6-8246-0b4d9a8fdc73] remove a6d14492-4211-47b6-8246-0b4d9a8fdc73
+execute as @p at @s positioned ^ ^2 ^5 run summon armor_stand ~ ~ ~ {Tags:["945cee03-9821-46d3-9df9-7973895af41f","yes"],ArmorItems:[{},{},{},{id:dirt}]}
+execute as @e[tag=945cee03-9821-46d3-9df9-7973895af41f] at @s anchored eyes run particle totem_of_undying ~ ~ ~ 1 1 1 0.01 100 normal @a
+tag @e[tag=945cee03-9821-46d3-9df9-7973895af41f] remove 945cee03-9821-46d3-9df9-7973895af41f
 
 # tp @s ~ ~5 ~
 say lol xd
 
-execute as @p at @s run summon armor_stand ~ ~ ~ {Tags:["a2abe5d2-e73c-425e-a328-b0db87e68594"],ArmorItems:[{},{},{},{id:dirt}]}
-execute as @e[tag=a2abe5d2-e73c-425e-a328-b0db87e68594] at @s run setblock ~ ~ ~ diamond_block
-tag @e[tag=a2abe5d2-e73c-425e-a328-b0db87e68594] remove a2abe5d2-e73c-425e-a328-b0db87e68594
+execute as @p at @s run summon armor_stand ~ ~ ~ {Tags:["5379e4e9-ce2d-410f-8892-7656c48bf616"],ArmorItems:[{},{},{},{id:dirt}]}
+execute as @e[tag=5379e4e9-ce2d-410f-8892-7656c48bf616] at @s run setblock ~ ~ ~ diamond_block
+tag @e[tag=5379e4e9-ce2d-410f-8892-7656c48bf616] remove 5379e4e9-ce2d-410f-8892-7656c48bf616
 
-execute as @e run function test:_schedule/4ddbedfd-fa00-4569-90d8-d4708f0e895b
-# function test:_schedule/b700a5d9-9166-4fae-9df3-ebced8fa86c7
+execute as @e run function test:_schedule/0c38a194-b4a4-4f2e-8285-6b1ea5bb86cd
+# function test:_schedule/f913ea2e-97ad-4b0d-87db-892590b105ee
