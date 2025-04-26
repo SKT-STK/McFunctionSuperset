@@ -63,41 +63,46 @@ for root, _dirs, files in os.walk('.'):
         
         
         if not schedule_dir_nuked:
-          schedule_func_path = root.split('function\\')[0] + '\\_schedule\\'
+          schedule_func_path = root.split('function\\')[0] + '\\function\\_schedule\\'
           clean_schedule_dir(schedule_func_path)
         schedule_dir_nuked = True
+        
+        scheduled_names = []
         i = -1
         for line in lines:
           i += 1
-          if 'schedule function ' not in line:
-            continue
+          if 'schedule function ' in line:
+            tag_uuid = str(uuid4())
+            func_uuid = str(uuid4())
+            schedule_uuid = str(uuid4())
+            ticks = line.split('schedule ', 1)[1].split()[-2 if line.endswith('replace\n') or line.endswith('append\n') else -1]
+            replace_append = ' replace' if line.endswith('replace\n') else ' append' if line.endswith('append\n') else ''
+            original_line = line.replace('schedule ', '', 1).replace(' append', '').replace(' replace', '').split()
+            original_line.remove(original_line[-1])
+            original_line = ' '.join(original_line)
             
-          tag_uuid = str(uuid4())
-          func_uuid = str(uuid4())
-          schedule_uuid = str(uuid4())
-          ticks = line.split('schedule ', 1)[1].split()[-2 if line.endswith('replace\n') or line.endswith('append\n') else -1]
-          replace_append = ' replace' if line.endswith('replace\n') else ' append' if line.endswith('append\n') else ''
-          original_line = line.replace('schedule ', '', 1).replace(' append', '').replace(' replace', '').split()
-          original_line.remove(original_line[-1])
-          original_line = ' '.join(original_line)
-          
-          with open(f'{os.path.join(schedule_func_path, func_uuid)}.mcfunction', 'w') as file:
-            file.writelines([
-              f'tag @s add {tag_uuid}\n',
-              f'schedule function {schedule_func_path.split('\\')[2]}:_schedule/{schedule_uuid} {ticks}{replace_append}'
-            ])
+            with open(f'{os.path.join(schedule_func_path, func_uuid)}.mcfunction', 'w') as file:
+              file.writelines([
+                f'tag @s add {tag_uuid}\n',
+                f'schedule function {schedule_func_path.split('\\')[2]}:_schedule/{schedule_uuid} {ticks}{replace_append}'
+              ])
+              
+            with open(f'{os.path.join(schedule_func_path, schedule_uuid)}.mcfunction', 'w') as file:
+              file.writelines([
+                f'execute as @e[tag={tag_uuid}] run function {original_line.split()[-1]}\n',
+                f'tag @e[tag={tag_uuid}] remove {tag_uuid}'
+              ])
+              
+            new_command = original_line.split()
+            new_command[-1] = f'{schedule_func_path.split('\\')[2]}:_schedule/{func_uuid}'
+            new_command = ' '.join(new_command)
             
-          with open(f'{os.path.join(schedule_func_path, schedule_uuid)}.mcfunction', 'w') as file:
-            file.writelines([
-              f'execute as @e[tag={tag_uuid}] run function {original_line.split()[-1]}\n',
-              f'tag @e[tag={tag_uuid}] remove {tag_uuid}'
-            ])
+            lines[i] = new_command + '\n'
+            scheduled_names.append(dict(name = original_line.split()[-1], uuid = schedule_uuid))
             
-          new_command = original_line.split()
-          new_command[-1] = f'{schedule_func_path.split('\\')[2]}:_schedule/{func_uuid}'
-          new_command = ' '.join(new_command)
-          
-          lines[i] = new_command + '\n'
+          elif 'schedule clear ' in line:
+            if (name := line.split()[-1]) in [d['name'] for d in scheduled_names]:
+              lines[i] = line.replace(name, f'{schedule_func_path.split('\\')[2]}:_schedule/{schedule_uuid}')
           
       with open(file_path.replace('.mcfx', '.mcfunction').replace('.mcfunctionx', '.mcfunction'), 'w') as file:
         file.writelines(lines)
