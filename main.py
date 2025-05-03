@@ -54,7 +54,7 @@ for root, _dirs, files in os.walk('.'):
           else:
             new_nbt_1, new_nbt_2 = nbt.split('Tags:[', 1)
             new_commands[0] = remove_between_strings(line.replace(old_command, f'summon {entity} ~ ~ ~ {new_nbt_1}Tags:["{uuid}",{new_nbt_2}'), f' summon {entity}{nbt}', ' run', True)
-          new_commands[1] = f'execute as @e[tag={uuid}]{line.split(f' summon {entity}{nbt}', 1)[1]}'
+          new_commands[1] = f'execute as @e[tag={uuid}] at @s{line.split(f' summon {entity}{nbt}', 1)[1]}'
           new_commands[2] = f'tag @e[tag={uuid}] remove {uuid}'
           
           lines[i] = new_commands[0] + '\n'
