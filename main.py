@@ -3,6 +3,10 @@ import re
 import os
 from uuid import uuid4
 
+
+IS_FUCKING_BROKEN = False
+
+
 def extract_outer_braces(s, b):
   if b == '{}':
     pattern = r'{(?:[^{}]+|(?R))*}'
@@ -63,7 +67,7 @@ for root, _dirs, files in os.walk('.'):
         
         
         if not schedule_dir_nuked:
-          schedule_func_path = root.split('function\\')[0] + '\\function\\_schedule\\'
+          schedule_func_path = root.split('function\\')[0] + f'{'\\function' if not IS_FUCKING_BROKEN else ''}\\_schedule\\'
           clean_schedule_dir(schedule_func_path)
         schedule_dir_nuked = True
         
@@ -84,7 +88,7 @@ for root, _dirs, files in os.walk('.'):
             with open(f'{os.path.join(schedule_func_path, func_uuid)}.mcfunction', 'w') as file:
               file.writelines([
                 f'tag @s add {tag_uuid}\n',
-                f'schedule function {schedule_func_path.split('\\')[2]}:_schedule/{schedule_uuid} {ticks}{replace_append}'
+                f'schedule function {schedule_func_path.split('\\')[(3 if IS_FUCKING_BROKEN else 2)]}:_schedule/{schedule_uuid} {ticks}{replace_append}'
               ])
               
             with open(f'{os.path.join(schedule_func_path, schedule_uuid)}.mcfunction', 'w') as file:
@@ -94,15 +98,16 @@ for root, _dirs, files in os.walk('.'):
               ])
               
             new_command = original_line.split()
-            new_command[-1] = f'{schedule_func_path.split('\\')[2]}:_schedule/{func_uuid}'
+            new_command[-1] = f'{schedule_func_path.split('\\')[(3 if IS_FUCKING_BROKEN else 2)]}:_schedule/{func_uuid}'
             new_command = ' '.join(new_command)
             
             lines[i] = new_command + '\n'
-            scheduled_names.append(dict(name = original_line.split()[-1], uuid = schedule_uuid))
+            scheduled_names.append(dict(name = original_line.split()[-1], uuid = schedule_uuid, tag = tag_uuid))
             
           elif 'schedule clear ' in line:
             if (name := line.split()[-1]) in [d['name'] for d in scheduled_names]:
-              lines[i] = line.replace(name, f'{schedule_func_path.split('\\')[2]}:_schedule/{schedule_uuid}')
+              lines[i] = line.replace(name, f'{schedule_func_path.split('\\')[(3 if IS_FUCKING_BROKEN else 2)]}:_schedule/{(this_scheduled_name := ([dict(uuid = d['uuid'], tag = d['tag']) for d in scheduled_names if d['name'] == name][0]))['uuid']}')
+              lines.insert(i + 1, f'tag @e[tag={this_scheduled_name['tag']}] remove {this_scheduled_name['tag']}\n')
           
       with open(file_path.replace('.mcfx', '.mcfunction').replace('.mcfunctionx', '.mcfunction'), 'w') as file:
         file.writelines(lines)
