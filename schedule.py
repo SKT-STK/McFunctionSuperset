@@ -55,7 +55,7 @@ for root, _dirs, files in os.walk('.'):
             with open(f'{os.path.join(schedule_func_path, schedule_uuid)}.mcfunction', 'w') as file:
               file.writelines([
                 f'execute as @e[tag={tag_uuid}] run function {original_line.split()[-1]}\n',
-                f'tag @e[tag={tag_uuid}] remove {tag_uuid}'
+                f'tag @e remove {tag_uuid}'
               ])
               
             new_command = original_line.split()
@@ -72,7 +72,7 @@ for root, _dirs, files in os.walk('.'):
             if (name := line.split()[-1]) in [d['name'] for d in scheduled_names]:
               lines[i] = line.replace(name, f'{schedule_func_path.split('\\')[(3 if IS_FUCKING_BROKEN else 2)]}:_schedule/{(this_scheduled_name := ([dict(uuid = d['uuid'], tag = d['tag']) for d in scheduled_names if d['name'] == name][0]))['uuid']}')
               before_schedule = line.split(' schedule clear')[0]
-              lines.insert(i + 1, before_schedule + f' tag @e[tag={this_scheduled_name['tag']}] remove {this_scheduled_name['tag']}\n')
+              lines.insert(i + 1, before_schedule + f' tag @e remove {this_scheduled_name['tag']}\n')
           
       with open(file_path, 'w') as file:
         file.writelines(lines)
