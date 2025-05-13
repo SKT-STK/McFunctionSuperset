@@ -1,9 +1,0 @@
-execute as @p at @s positioned ^ ^2 ^5 summon armor_stand{Tags:["yes"],ArmorItems:[{},{},{},{id:dirt}]} at @s anchored eyes run particle totem_of_undying ~ ~ ~ 1 1 1 0.01 100 normal @a
-
-# tp @s ~ ~5 ~
-say lol xd
-
-execute as @p at @s summon armor_stand{ArmorItems:[{},{},{},{id:dirt}]} at @s run setblock ~ ~ ~ diamond_block
-
-execute as @e run schedule function test:da_schedule 5t replace
-# schedule function test:da_schedule 1t
