@@ -3,7 +3,7 @@ from uuid import uuid4
 
 scheduled = []
 
-def main(ctx: Context):
+def schedule(ctx: Context):
   global scheduled
   for name, func in list(ctx.data.functions.items()):
     schedules = -1
@@ -20,9 +20,11 @@ def main(ctx: Context):
         line = line.replace(' as @s', '')
         if (exec_run := 'execute run ') in line:
           line = line.replace(exec_run, '')
+        if line.endswith(' replace'):
+          line = ' '.join(line.split()[:-1])
 
-        time = line.split()[-2 if line.endswith('replace') else -1]
-        call_name = line.split()[-3 if line.endswith('replace') else -2]
+        time = line.split()[-1]
+        call_name = line.split()[-2]
         
         player_uuid = str(uuid4())
         
@@ -43,7 +45,7 @@ def main(ctx: Context):
           f'tag @e remove {player_uuid}'
         ])
         
-        func.lines[i] = ' '.join(line.replace('schedule ', '').split()[:-3]) + f' {schedule_1}'
+        func.lines[i] = ' '.join(line.replace('schedule ', '').split()[:-2]) + f' {schedule_1}'
         
         scheduled.append(dict(
           original_name = call_name,
@@ -66,3 +68,12 @@ def main(ctx: Context):
         ])
         
         func.lines[i] = ' '.join(line.replace('schedule clear ', 'function ').split()[:-1]) + f' {clear_1}'
+
+def anchored(ctx: Context):
+  for func in list(ctx.data.functions.values()):
+    i = -1
+    for line in func.lines:
+      i += 1
+      
+      if (anch := ' anchored eyes ') in line:
+        func.lines[i] = line.replace(anch, f'{anch}positioned ^ ^ ^ ')
