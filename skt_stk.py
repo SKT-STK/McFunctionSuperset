@@ -60,7 +60,7 @@ def schedule(ctx: Context):
         if (exec_run := 'execute run ') in line:
           line = line.replace(exec_run, '')
           
-        this_dict = next((d for d in scheduled if d['original_name'] == line.split()[-1]), None)
+        this_dict = next((d for d in scheduled if d['original_name'] == line.split()[-1]))
         clear_1 = f'{name}/schedule_clear_{schedules}'
         ctx.data[clear_1] = Function([
           f'schedule clear {this_dict['name']}',
