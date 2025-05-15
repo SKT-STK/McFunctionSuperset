@@ -75,5 +75,5 @@ def anchored(ctx: Context):
     for line in func.lines:
       i += 1
       
-      if (anch := ' anchored eyes ') in line:
+      if (anch := ' anchored eyes ') in line and 'positioned ^' not in line.split(anch, 1)[1]:
         func.lines[i] = line.replace(anch, f'{anch}positioned ^ ^ ^ ')
