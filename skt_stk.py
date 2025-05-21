@@ -91,7 +91,7 @@ class Inline():
       macros = []
       has_parent = False
       for i, line in enumerate(func.lines):
-        if line.startswith('# '): continue
+        if line.startswith('# ') or line.replace(' ', '') == '': continue
         if not (
           (
             'function(with entity ' in line
@@ -137,7 +137,7 @@ class Inline():
       schedules = []
       has_parent = False
       for i, line in enumerate(func.lines):
-        if line.startswith('# '): continue
+        if line.startswith('# ') or line.replace(' ', '') == '': continue
         if not regex.match(r'function\(([1-9]\d*(?:[tsd])?)\):', line):
           if has_parent and self.get_indent(line) > (cur_parent := schedules[-1])['parent_indent']:
             cur_parent['indent_block'].append(dict(
