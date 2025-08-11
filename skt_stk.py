@@ -138,7 +138,7 @@ class Inline():
       has_parent = False
       for i, line in enumerate(func.lines):
         if line.startswith('# ') or line.replace(' ', '') == '': continue
-        if not regex.match(r'function\(([1-9]\d*(?:[tsd])?)\):', line):
+        if not regex.match(r'^\s*function\(([1-9]\d*(?:[tsd])?)\):', line):
           if has_parent and self.get_indent(line) > (cur_parent := schedules[-1])['parent_indent']:
             cur_parent['indent_block'].append(dict(
               line = line[cur_parent['parent_indent']:],
