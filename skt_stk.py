@@ -169,6 +169,52 @@ class Inline():
           func.lines.pop(line_index)
         
         self.ctx.data[schedule_name] = Function([inner_schedule['line'] for inner_schedule in schedule['indent_block']])
+  
+  def execute_if(self):
+    for name, func in list(self.ctx.data.functions.items()):
+      macros = []
+      has_parent = False
+      for i, line in enumerate(func.lines):
+        if line.startswith('# ') or line.replace(' ', '') == '': continue
+        if not (
+          'function()' in line
+          and line.endswith('):')
+        ):
+          if has_parent and self.get_indent(line) > (cur_parent := macros[-1])['parent_indent']:
+            cur_parent['indent_block'].append(dict(
+              line = line[cur_parent['parent_indent']:],
+              index = i
+            ))
+          else:
+            if has_parent:
+              has_parent = False
+          continue
+        
+        macros.append(dict(
+          parent_index = i,
+          parent_indent = self.get_indent(line),
+          indent_block = []
+        ))
+        
+        has_parent = True
+      
+      reversed_macros = macros
+      reversed_macros.reverse()
+      for i, macro in enumerate(reversed_macros):
+        func.lines[macro['parent_index']] = func.lines[macro['parent_index']].split('function(')[0] + f'function {(macro_name := f'{name}/execute_if_{i}')}'
+        
+        line_indexes_reversed = [inner_macro['index'] for inner_macro in macro['indent_block']]
+        line_indexes_reversed.reverse()
+        for line_index in line_indexes_reversed:
+          func.lines.pop(line_index)
+        
+        self.ctx.data[macro_name] = Function([inner_macro['line'] for inner_macro in macro['indent_block']])
+      
+      continuation_lines = func.lines
+      for i, line in enumerate(continuation_lines):
+        if line.lstrip().startswith(';'):
+          func.lines[i-1] += line.lstrip().replace(';', ' ')
+          func.lines.pop(i)
 
 
 def schedule(ctx: Context):
@@ -181,3 +227,4 @@ def inline(ctx: Context):
   inline = Inline(ctx)
   inline.macro()
   inline.schedule()
+  inline.execute_if()
