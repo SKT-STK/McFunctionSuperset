@@ -217,11 +217,11 @@ class Inline():
           func.lines.pop(i)
 
 
-def schedule(ctx: Context):
-  Schedule(ctx)
+# def schedule(ctx: Context):
+#   Schedule(ctx)
 
-def anchored(ctx: Context):
-  Anchored(ctx)
+# def anchored(ctx: Context):
+#   Anchored(ctx)
 
 def inline(ctx: Context):
   inline = Inline(ctx)
