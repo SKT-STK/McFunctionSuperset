@@ -27,5 +27,17 @@ execute if function():
 
 ~~you can enable/disable `schedule`, `anchored` and `inline` as you please in the `beet.json` file as pipeline elements,~~ plz do note however that `skt_stk.inline` should come before `mecha` ~~and `skt_stk.schedule` as well as `skt_stk.achored` should come after it in said order~~  
 
-!!! AT THIS MOMENT VERY VERY EXPERIMENTAL AND PROB HAS A 1_000_000 EDGE-CASES WHERE IT WONT WORK !!!,
+!!! AT THIS MOMENT VERY VERY EXPERIMENTAL AND PROB HAS A 1_000_000 EDGE-CASES WHERE IT WONT WORK !!!,  
 
+LIST OF KNOWN ISSUES:  
+
+- it is not possible to define inline macros as a macro command itself, eg.:
+
+```
+function(with entity @s):
+  $function(with storage temp:temp $(UUID)):
+    $say $(message)
+```
+
+^ this wont work  
+(working on a fix rn)
