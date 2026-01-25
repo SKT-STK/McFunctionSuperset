@@ -1,4 +1,4 @@
-a pugin for beet/bolt which adds:  
+a plugin for beet/bolt which adds:  
 
 
 ~~retaining entity and location execution context for `/schedule` if `as @s` is present in the same line,~~  
@@ -41,3 +41,4 @@ function(with entity @s):
 
 ^ this wont work  
 (working on a fix rn)
+
