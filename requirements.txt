@@ -1,4 +1,5 @@
 beet
 bolt
+mecha
 regex
 uuid
